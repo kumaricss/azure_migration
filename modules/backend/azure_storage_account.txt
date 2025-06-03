@@ -1,0 +1,36 @@
+# Create a Storage Account
+locals {
+  resource_group_name     = var.resource_group_name
+  location                = var.location
+  environment             = var.environment
+  owner                   = var.owner
+  dept                    = var.dept
+  storageAccountName      = var.storageAccountName
+  accountType             = var.accountType
+  kind                    = var.kind
+  accountTier             = var.accountTier
+  accessTier              = var.accessTier
+  supportHttpsTrafficOnly = var.supportHttpsTrafficOnly
+}
+
+resource "azurerm_storage_account" "sa" {
+  resource_group_name       = local.resource_group_name
+  location                  = local.location
+  name                      = local.storageAccountName
+  account_replication_type  = local.accountType
+  account_kind              = local.kind
+  account_tier              = local.accountTier
+  access_tier               = local.accessTier
+  enable_https_traffic_only = local.supportHttpsTrafficOnly
+
+  tags = {
+    environment = local.environment
+    owner       = local.owner
+    dept        = local.dept
+  }
+
+  depends_on = [
+    #module.azurerm_resource_group.rsg
+  ]
+}
+
