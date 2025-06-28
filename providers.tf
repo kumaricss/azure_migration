@@ -15,5 +15,5 @@ terraform {
 #https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 provider "azurerm" {
   features {}
-  subscription_id = "f6ae2e64-257f-47fa-bb48-994d8d924144"
+  subscription_id = "xxxxxx-xxx-47fa-xxx-xxxxxd924xxx"
 }
