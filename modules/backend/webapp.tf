@@ -1,12 +1,7 @@
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
-resource "azurerm_app_service_plan" "asp" {
+resource "azurerm_app_service_plan" "asp2" {
   name                = var.app_service_plan_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   tags                = merge(var.tags)
 
   sku {
@@ -17,10 +12,10 @@ resource "azurerm_app_service_plan" "asp" {
 
 
 resource "azurerm_app_service" "app1" {
-  name                = "dev-jk-app01"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = var.app_service_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {
@@ -40,10 +35,10 @@ resource "azurerm_app_service" "app1" {
 }
 
 resource "azurerm_app_service" "app2" {
-  name                = "dev-jk-app02"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = "dev-jk-backeend-app02"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {
@@ -63,10 +58,10 @@ resource "azurerm_app_service" "app2" {
 }
 
 resource "azurerm_app_service" "app3" {
-  name                = "dev-jk-app03"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = "dev-jk-backeend-app03"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {
@@ -86,10 +81,10 @@ resource "azurerm_app_service" "app3" {
 }
 
 resource "azurerm_app_service" "app4" {
-  name                = "dev-jk-app04"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = "dev-jk-backeend-app04"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {
@@ -109,10 +104,10 @@ resource "azurerm_app_service" "app4" {
 }
 
 resource "azurerm_app_service" "app5" {
-  name                = "dev-jk-app05"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = "dev-jk-backeend-app05"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {
@@ -132,10 +127,10 @@ resource "azurerm_app_service" "app5" {
 }
 
 resource "azurerm_app_service" "app6" {
-  name                = "dev-jk-app06"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.asp.id
+  name                = "dev-jk-backeend-app06"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  app_service_plan_id = azurerm_app_service_plan.asp2.id
   tags                = merge(var.tags)
 
   site_config {

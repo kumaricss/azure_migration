@@ -1,0 +1,6 @@
+resource_group_name = "dev-ftc-rsg01"
+location            = "West Europe"
+mysql_server_name   = "dev-ftc-mysqlserver01"
+mysql_database      = "dev-ftc-mysql_database01"
+admin_username      = "mysqladminuser"
+admin_password      = "MySqlP@ssw0rd123!"

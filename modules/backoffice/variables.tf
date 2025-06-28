@@ -16,8 +16,8 @@ variable "app_service_plan_name" {
 variable "app_service_name" {
   type        = string
   description = "Specifies the name of the App Service."
-}
 
+}
 
 variable "tags" {
   description = "A map of tags to add to all resources"
