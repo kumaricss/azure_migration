@@ -1,0 +1,19 @@
+parameters:
+  - name: environment
+    type: string
+  - name: azure_subscription
+    type: string
+steps:
+  - task: AzurePowerShell@5
+    displayName: 'Terraform Plan'
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      failOnStandardError: true
+      ScriptType: 'InlineScript'
+      Inline: |
+        terraform plan `
+        -input=false `
+        -lock=false `
+        -var-file vars/${{ parameters.environment }}.tfvars `
+        -out ${{ parameters.environment }}.plan
+      azurePowerShellVersion: 'LatestVersion'

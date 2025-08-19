@@ -1,0 +1,26 @@
+parameters:
+  - name: azure_subscription
+    type: string
+  - name: backend_resource_group_name
+    type: string 
+  - name: backend_storage_account_name
+    type: string 
+  - name: backend_state_key
+    type: string
+
+steps:
+  - task: AzurePowerShell@5
+    displayName: 'Terraform Init'
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      failOnStandardError: true
+      ScriptType: 'InlineScript'
+      Inline: |
+        terraform init -input=false `
+        -backend-config="key=${{ parameters.backend_state_key }}" `
+        -backend-config="resource_group_name=${{ parameters.backend_resource_group_name }}" `
+        -backend-config="storage_account_name=${{ parameters.backend_storage_account_name }}" `
+        -backend-config="subscription_id=$env:ARM_SUBSCRIPTION_ID" `
+        -backend-config="tenant_id=$env:ARM_TENANT_ID" `
+        -backend-config="client_id=$env:ARM_CLIENT_ID"
+      azurePowerShellVersion: 'LatestVersion'

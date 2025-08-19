@@ -1,0 +1,18 @@
+parameters:
+  - name: environment
+    type: string
+  - name: azure_subscription
+    type: string
+steps:
+  - task: AzurePowerShell@5
+    displayName: 'Terraform Apply'
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      failOnStandardError: true
+      ScriptType: 'InlineScript'
+      Inline: |
+        terraform apply `
+        -input=false `
+        -var-file vars/${{ parameters.environment }}.tfvars `
+        -auto-approve
+      azurePowerShellVersion: 'LatestVersion'

@@ -1,0 +1,30 @@
+parameters:
+  - name: environment
+    type: string
+  - name: fail_on_test_failures
+    type: boolean
+    default: true
+jobs:
+  - job: QualityGate
+    displayName: 'TFSec Scan'
+    pool: 
+      name: Azure Pipelines
+      vmImage: 'ubuntu-latest'
+    steps:
+      - bash: |
+          mkdir TFSecReport
+          chmod 777 TFSecReport
+          docker run --rm -t -v $(pwd):/src:rw aquasec/tfsec /src \
+          --tfvars-file /src/vars/${{ parameters.environment }}.tfvars \
+          --format JUnit \
+          --out ./src/TFSecReport/tfsec.xml
+
+          #For some reason failOnStdErr:false isn't working. Adding for zero exit code
+          echo '' 
+        displayName: 'TFSec Static Code Analysis'
+        failOnStderr: false
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/*.xml'
+          failTaskOnFailedTests: ${{ parameters.fail_on_test_failures }}

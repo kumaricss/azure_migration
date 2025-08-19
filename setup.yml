@@ -1,0 +1,27 @@
+parameters:
+  - name: key_vault_name
+    type: string
+  - name: secret_filter
+    type: string
+
+steps:
+  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+    continueOnError: false
+    displayName: 'Install Terraform latest'
+  - task: AzureKeyVault@2
+    continueOnError: false
+    displayName: 'Azure Key Vault: kv-rm-PS-p'
+    inputs:
+      azureSubscription: 'CMFG Production PS'
+      KeyVaultName: ${{ parameters.key_vault_name }}
+      SecretsFilter: ${{ parameters.secret_filter }}
+      RunAsPreJob: false
+  - powershell: |
+      Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET]$(${{ parameters.secret_filter }})"
+  - task: colinsalmcorner.colinsalmcorner-buildtasks.replace-tokens-task.ReplaceTokens@1
+    continueOnError: false
+    displayName: 'Replace tokens in $(System.DefaultWorkingDirectory)'
+    inputs:
+      sourcePath: '$(System.DefaultWorkingDirectory)'
+      filePattern: main.tf
+      tokenRegex: '__(\w+)__'
