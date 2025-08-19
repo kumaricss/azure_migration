@@ -1,0 +1,51 @@
+trigger:
+  - main
+
+pool:
+  name: "Build-vmptfsp05-Shared"
+
+resources:
+  repositories:
+    - repository: cicd
+      type: git
+      name: "Internal Open Source/CICDTemplates"
+      ref: refs/tags/v1.1.1
+
+stages:
+  - template: terraform/build-and-release.yml@cicd
+    parameters:
+      environment: dev
+      key_vault_name: kv-rm-PS-p
+      key_vault_secret_filter: SP-RM-PS-P
+      azure_subscription: PS-NonProd PS
+      arm_client_id: 882d2b2b-3b2d-45a4-87c6-8ed0657afc9e
+      arm_subscription_id: a3272aac-b0f0-42f4-b4bc-e903b90805e1
+      arm_tenant_id: a00452fd-8469-409e-91a8-bb7a008e2da0
+      backend_resource_group_name: RG-CMFG-D01-commoninfra
+      backend_storage_account_name: sapsdevinfrastate1
+      backend_state_key: dev.terraform.tfstate
+  - template: terraform/build-and-release.yml@cicd
+    parameters:
+      environment: demo
+      key_vault_name: kv-rm-PS-p
+      key_vault_secret_filter: SP-RM-PS-P
+      azure_subscription: PS-NonProd PS
+      arm_client_id: 882d2b2b-3b2d-45a4-87c6-8ed0657afc9e
+      arm_subscription_id: a3272aac-b0f0-42f4-b4bc-e903b90805e1
+      arm_tenant_id: a00452fd-8469-409e-91a8-bb7a008e2da0
+      backend_resource_group_name: RG-CMFG-D01-commoninfra
+      backend_storage_account_name: sapsdevinfrastate1
+      backend_state_key: demo.terraform.tfstate
+  - template: terraform/build-and-release.yml@cicd
+    parameters:
+      environment: prod
+      key_vault_name: kv-rm-PS-p
+      key_vault_secret_filter: SP-RM-PS-P
+      azure_subscription: PS-Prod PS
+      arm_client_id: 882d2b2b-3b2d-45a4-87c6-8ed0657afc9e
+      arm_subscription_id: d05362ca-df16-4573-b4a1-9e51580048f8
+      arm_tenant_id: a00452fd-8469-409e-91a8-bb7a008e2da0
+      backend_resource_group_name: RG-CMFG-P01-commoninfra-ATLAS
+      backend_storage_account_name: sapsinfrastate
+      backend_state_key: prod.terraform.tfstate
+  

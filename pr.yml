@@ -1,0 +1,67 @@
+parameters:
+  - name: key_vault_name
+    type: string
+  - name: key_vault_secret_filter
+    type: string
+  - name: azure_subscription
+    type: string
+  - name: arm_client_id
+    type: string
+  - name: arm_subscription_id
+    type: string
+  - name: arm_tenant_id
+    type: string
+  - name: backend_resource_group_name
+    type: string 
+  - name: backend_storage_account_name
+    type: string 
+  - name: backend_state_key
+    type: string
+  - name: fail_on_tfsec
+    type: boolean
+    default: true
+
+
+variables:
+  environment: dev
+  ARM_CLIENT_ID: ${{ parameters.arm_client_id }}
+  ARM_SUBSCRIPTION_ID: ${{ parameters.arm_subscription_id }}
+  ARM_TENANT_ID: ${{ parameters.arm_tenant_id }}
+
+stages:
+  - stage: ValidateAndPlan
+    displayName: 'Validate and Plan'
+    jobs:
+    - job: validateAndPlan
+      displayName: Validate and Plan
+      steps:
+        - template: task/setup.yml
+          parameters:
+            key_vault_name: ${{ parameters.key_vault_name }}
+            secret_filter: ${{ parameters.key_vault_secret_filter }}
+
+        - template: task/init.yml
+          parameters:
+            azure_subscription: ${{ parameters.azure_subscription }}
+            backend_resource_group_name: ${{ parameters.backend_resource_group_name }}
+            backend_storage_account_name: ${{ parameters.backend_storage_account_name }}
+            backend_state_key: ${{ parameters.backend_state_key }}
+
+        - task: AzurePowerShell@5
+          displayName: 'Terraform Validate'
+          inputs:
+            azureSubscription: ${{ parameters.azure_subscription }}
+            failOnStandardError: true`
+            ScriptType: 'InlineScript'
+            Inline: |
+              terraform validate
+            azurePowerShellVersion: 'LatestVersion'
+            
+        - template: task/plan.yml
+          parameters:
+            azure_subscription: ${{ parameters.azure_subscription }}
+            environment: ${{ variables.environment }}
+    - template: job/tfsec.yml
+      parameters:
+        environment: dev
+        fail_on_test_failures: ${{ parameters.fail_on_tfsec }}
